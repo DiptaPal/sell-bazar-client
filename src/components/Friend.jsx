@@ -1,4 +1,4 @@
-import { PersonAddOutlined, PersonRemoveOutlined } from "@mui/icons-material";
+import { Category, PersonAddOutlined, PersonRemoveOutlined } from "@mui/icons-material";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -6,7 +6,7 @@ import { setFriends } from "state";
 import FlexBetween from "./FlexBetween";
 import UserImage from "./UserImage";
 
-const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
+const Friend = ({ friendId, name, subtitle, userPicturePath, category }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { _id } = useSelector((state) => state.user);
@@ -60,7 +60,7 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
             {name}
           </Typography>
           <Typography color={medium} fontSize="0.75rem">
-            {subtitle}
+            {subtitle}, {category}
           </Typography>
         </Box>
       </FlexBetween>

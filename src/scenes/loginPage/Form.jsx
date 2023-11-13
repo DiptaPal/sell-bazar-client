@@ -62,6 +62,8 @@ const Form = () => {
       formData.append(value, values[value]);
     }
     formData.append("picturePath", values.picture.name);
+    formData.append("role", '');
+    formData.append("rating", '');
 
     const savedUserResponse = await fetch(
       "http://localhost:3001/auth/register",
@@ -91,9 +93,10 @@ const Form = () => {
         setLogin({
           user: loggedIn.user,
           token: loggedIn.token,
+          role: loggedIn.user.role,
         })
       );
-      navigate("/home");
+      navigate("/dashboard");
     }
   };
 

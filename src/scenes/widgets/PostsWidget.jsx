@@ -1,12 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state";
 import PostWidget from "./PostWidget";
 
-const PostsWidget = ({ userId, isProfile = false }) => {
+const PostsWidget = ({ userId, isProfile = false,  selectedCategory, setSelectedCategory }) => {
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.posts);
   const token = useSelector((state) => state.token);
+  const [filteredPosts, setFilteredPosts] = useState([]);
+
 
   const getPosts = async () => {
     const response = await fetch("http://localhost:3001/posts", {
@@ -29,6 +31,17 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     dispatch(setPosts({ posts: data }));
   };
 
+  const filterPostsByCategory = () => {
+    if (!selectedCategory || selectedCategory === 'all') {
+      setFilteredPosts(posts);
+    } else {
+      const filtered = posts.filter((post) => post.category === selectedCategory);
+      setFilteredPosts(filtered);
+    }
+  };
+
+  
+
   useEffect(() => {
     if (isProfile) {
       getUserPosts();
@@ -37,9 +50,13 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    filterPostsByCategory();
+  }, [selectedCategory, posts]);
+
   return (
     <>
-      {posts.map(
+      {filteredPosts.map(
         ({
           _id,
           userId,
@@ -51,6 +68,8 @@ const PostsWidget = ({ userId, isProfile = false }) => {
           userPicturePath,
           likes,
           comments,
+          price,
+          category,
         }) => (
           <PostWidget
             key={_id}
@@ -63,6 +82,8 @@ const PostsWidget = ({ userId, isProfile = false }) => {
             userPicturePath={userPicturePath}
             likes={likes}
             comments={comments}
+            price={price}
+            category={category}
           />
         )
       )}

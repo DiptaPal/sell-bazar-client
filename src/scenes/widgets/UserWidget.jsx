@@ -4,19 +4,37 @@ import {
   LocationOnOutlined,
   WorkOutlineOutlined,
 } from "@mui/icons-material";
-import { Box, Typography, Divider, useTheme } from "@mui/material";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import {
+  Box,
+  Typography,
+  Divider,
+  useTheme,
+  ButtonGroup,
+  Button,
+} from "@mui/material";
 import UserImage from "components/UserImage";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { setUserPost } from "state";
 
-const UserWidget = ({ userId, picturePath }) => {
+const UserWidget = ({
+  userId,
+  picturePath,
+  selectedCategory,
+  setSelectedCategory,
+}) => {
+  const dispatch = useDispatch();
   const [user, setUser] = useState(null);
+  const [posts, setPosts] = useState(null);
   const { palette } = useTheme();
   const navigate = useNavigate();
   const token = useSelector((state) => state.token);
+  const userPost = useSelector((state) => state.userPost);
+  const role = Boolean(useSelector((state) => state.role));
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
@@ -30,8 +48,22 @@ const UserWidget = ({ userId, picturePath }) => {
     setUser(data);
   };
 
+  const getPosts = async () => {
+    const response = await fetch("http://localhost:3001/posts", {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await response.json();
+    setPosts(data);
+  };
+
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+  };
+
   useEffect(() => {
     getUser();
+    getPosts();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!user) {
@@ -82,6 +114,10 @@ const UserWidget = ({ userId, picturePath }) => {
 
       {/* SECOND ROW */}
       <Box p="1rem 0">
+        <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
+          <AdminPanelSettingsIcon fontSize="large" sx={{ color: main }} />
+          <Typography color={medium}>{role ? "Admin" : "Seller"}</Typography>
+        </Box>
         <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
           <LocationOnOutlined fontSize="large" sx={{ color: main }} />
           <Typography color={medium}>{location}</Typography>
@@ -144,6 +180,45 @@ const UserWidget = ({ userId, picturePath }) => {
           <EditOutlined sx={{ color: main }} />
         </FlexBetween>
       </Box>
+      <Divider />
+
+      <>
+        {role && (
+          <>
+            <Divider />
+            <Box style={{ padding: "1rem 0px" }}>
+              <Typography
+                fontSize="1rem"
+                color={main}
+                fontWeight="500"
+                mb="1rem"
+              >
+                Dashboard Option
+              </Typography>
+              <Box
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "10px",
+                }}
+              >
+                <Button
+                  variant={userPost === "user" ? "contained" : "outlined"}
+                  onClick={() => dispatch(setUserPost({ userPost: "user" }))}
+                >
+                  All Users
+                </Button>
+                <Button
+                  variant={userPost === "post" ? "contained" : "outlined"}
+                  onClick={() => dispatch(setUserPost({ userPost: "post" }))}
+                >
+                  All Posts
+                </Button>
+              </Box>
+            </Box>
+          </>
+        )}
+      </>
     </WidgetWrapper>
   );
 };

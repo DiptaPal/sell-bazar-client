@@ -22,6 +22,8 @@ const PostWidget = ({
   userPicturePath,
   likes,
   comments,
+  price,
+  category,
 }) => {
   const [isComments, setIsComments] = useState(false);
   const dispatch = useDispatch();
@@ -54,6 +56,7 @@ const PostWidget = ({
         name={name}
         subtitle={location}
         userPicturePath={userPicturePath}
+        category={category}
       />
       <Typography color={main} sx={{ mt: "1rem" }}>
         {description}
@@ -67,6 +70,15 @@ const PostWidget = ({
           src={`http://localhost:3001/assets/${picturePath}`}
         />
       )}
+      <div>
+        {
+          price && (
+            <Typography sx={{ color: main, m: "0.5rem 0", pl: "0.5rem", textAlign: "right" }}>
+              Price: ${price}
+            </Typography>
+          )
+        }
+      </div>
       <FlexBetween mt="0.25rem">
         <FlexBetween gap="1rem">
           <FlexBetween gap="0.3rem">

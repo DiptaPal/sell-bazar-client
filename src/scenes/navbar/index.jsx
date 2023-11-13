@@ -22,15 +22,18 @@ import {
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { setMode, setLogout } from "state";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import FlexBetween from "components/FlexBetween";
+import { ro } from "date-fns/locale";
 
 const Navbar = () => {
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
+  const role = Boolean(useSelector((state) => state.role));
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  
 
   const theme = useTheme();
   const neutralLight = theme.palette.neutral.light;
@@ -48,13 +51,14 @@ const Navbar = () => {
           fontWeight="bold"
           fontSize="clamp(1rem, 2rem, 2.25rem)"
           color="primary"
-          onClick={() => navigate("/home")}
+          onClick={() => navigate(`${role ? "/dashboard" : "/home"}`)}
           sx={{
             "&:hover": {
               color: primaryLight,
               cursor: "pointer",
             },
-          }}>
+          }}
+        >
           Sell Bazar
         </Typography>
         {isNonMobileScreens && (
@@ -62,7 +66,8 @@ const Navbar = () => {
             backgroundColor={neutralLight}
             borderRadius="9px"
             gap="3rem"
-            padding="0.1rem 1.5rem">
+            padding="0.1rem 1.5rem"
+          >
             <InputBase placeholder="Search..." />
             <IconButton>
               <Search />
@@ -84,6 +89,18 @@ const Navbar = () => {
           <Message sx={{ fontSize: "25px" }} />
           <Notifications sx={{ fontSize: "25px" }} />
           <Help sx={{ fontSize: "25px" }} />
+          {/* Link button for dashboard */}
+          {role && (
+            <Link to="/dashboard" style={{ textDecoration: "none" }}>
+              <Typography
+                variant="button"
+                color="primary"
+                sx={{ fontSize: "1rem", fontWeight: "bold", cursor: "pointer" }}
+              >
+                Dashboard
+              </Typography>
+            </Link>
+          )}
           <FormControl variant="standard" value={fullName}>
             <Select
               value={fullName}
@@ -100,7 +117,8 @@ const Navbar = () => {
                   backgroundColor: neutralLight,
                 },
               }}
-              input={<InputBase />}>
+              input={<InputBase />}
+            >
               <MenuItem value={fullName}>
                 <Typography>{fullName}</Typography>
               </MenuItem>
@@ -110,7 +128,8 @@ const Navbar = () => {
         </FlexBetween>
       ) : (
         <IconButton
-          onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}>
+          onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
+        >
           <Menu />
         </IconButton>
       )}
@@ -125,11 +144,13 @@ const Navbar = () => {
           zIndex="10"
           maxWidth="500px"
           minWidth="300px"
-          backgroundColor={background}>
+          backgroundColor={background}
+        >
           {/* CLOSE ICON */}
           <Box display="flex" justifyContent="flex-end" p="1rem">
             <IconButton
-              onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}>
+              onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
+            >
               <Close />
             </IconButton>
           </Box>
@@ -140,10 +161,12 @@ const Navbar = () => {
             flexDirection="column"
             justifyContent="center"
             alignItems="center"
-            gap="3rem">
+            gap="3rem"
+          >
             <IconButton
               onClick={() => dispatch(setMode())}
-              sx={{ fontSize: "25px" }}>
+              sx={{ fontSize: "25px" }}
+            >
               {theme.palette.mode === "dark" ? (
                 <DarkMode sx={{ fontSize: "25px" }} />
               ) : (
@@ -153,6 +176,21 @@ const Navbar = () => {
             <Message sx={{ fontSize: "25px" }} />
             <Notifications sx={{ fontSize: "25px" }} />
             <Help sx={{ fontSize: "25px" }} />
+            {role && (
+              <Link to="/dashboard" style={{ textDecoration: "none" }}>
+                <Typography
+                  variant="button"
+                  color="primary"
+                  sx={{
+                    fontSize: "1rem",
+                    fontWeight: "bold",
+                    cursor: "pointer",
+                  }}
+                >
+                  Dashboard
+                </Typography>
+              </Link>
+            )}
             <FormControl variant="standard" value={fullName}>
               <Select
                 value={fullName}
@@ -169,7 +207,8 @@ const Navbar = () => {
                     backgroundColor: neutralLight,
                   },
                 }}
-                input={<InputBase />}>
+                input={<InputBase />}
+              >
                 <MenuItem value={fullName}>
                   <Typography>{fullName}</Typography>
                 </MenuItem>

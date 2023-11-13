@@ -5,6 +5,8 @@ const initialState = {
   user: null,
   token: null,
   posts: [],
+  role: null,
+  userPost: "user",
 };
 
 export const authSlice = createSlice({
@@ -17,11 +19,18 @@ export const authSlice = createSlice({
     setLogin: (state, action) => {
       state.user = action.payload.user;
       state.token = action.payload.token;
+      state.role = action.payload.role;
     },
     setLogout: (state) => {
       state.user = null;
       state.token = null;
+      state.role = null;
     },
+
+    setUserPost: (state, action) => {
+      state.userPost = action.payload.userPost;
+    },
+
     setFriends: (state, action) => {
       if (state.user) {
         state.user.friends = action.payload.friends;
@@ -42,6 +51,6 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost } =
+export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost, setUserPost } =
   authSlice.actions;
 export default authSlice.reducer;

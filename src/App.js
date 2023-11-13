@@ -7,11 +7,13 @@ import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
+import Dashboard from "scenes/dashboard";
 
 function App() {
   const mode = useSelector((state) => state.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
   const isAuth = Boolean(useSelector((state) => state.token));
+  const role = Boolean(useSelector((state) => state.role));
 
   return (
     <div className="app">
@@ -22,11 +24,15 @@ function App() {
             <Route path="/" element={<LoginPage />} />
             <Route
               path="/home"
-              element={isAuth ? <HomePage /> : <Navigate to="/" />}
+              element={(isAuth && !role) ? <HomePage /> : <Navigate to="/" />}
             />
             <Route
               path="/profile/:userId"
               element={isAuth ? <ProfilePage /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/dashboard"
+              element={(isAuth && role) ? <Dashboard /> : <Navigate to="/" />}
             />
           </Routes>
         </ThemeProvider>

@@ -30,17 +30,22 @@ const MyPostWidget = ({ picturePath }) => {
   const [isImage, setIsImage] = useState(false);
   const [image, setImage] = useState(null);
   const [post, setPost] = useState("");
+  const [price, setPrice] = useState(0);
+  const [category, setCategory] = useState("");
   const { palette } = useTheme();
   const { _id } = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
+  
 
   const handlePost = async () => {
     const formData = new FormData();
     formData.append("userId", _id);
     formData.append("description", post);
+    formData.append("price", price);
+    formData.append("category", category);
     if (image) {
       formData.append("picture", image);
       formData.append("picturePath", image.name);
@@ -55,16 +60,17 @@ const MyPostWidget = ({ picturePath }) => {
     dispatch(setPosts({ posts }));
     setImage(null);
     setPost("");
+    setPrice(0);
+    setCategory("");
   };
 
   return (
     <WidgetWrapper>
-      <FlexBetween gap="1.5rem">
+      <FlexBetween gap="1.5rem" flexDirection={!isNonMobileScreens ? "column" : "row"}>
         <UserImage image={picturePath} />
         <InputBase
           placeholder="Description of your product"
           onChange={(e) => setPost(e.target.value)}
-          value={post}
           sx={{
             width: "100%",
             backgroundColor: palette.neutral.light,
@@ -74,8 +80,7 @@ const MyPostWidget = ({ picturePath }) => {
         />
         <InputBase
           placeholder="Price of your product"
-          onChange={(e) => setPost(e.target.value)}
-          value={post}
+          onChange={(e) => setPrice(e.target.value)}
           sx={{
             width: "100%",
             backgroundColor: palette.neutral.light,
@@ -85,8 +90,7 @@ const MyPostWidget = ({ picturePath }) => {
         />
         <InputBase
           placeholder="Category"
-          onChange={(e) => setPost(e.target.value)}
-          value={post}
+          onChange={(e) => setCategory(e.target.value)}
           sx={{
             width: "100%",
             backgroundColor: palette.neutral.light,
@@ -172,7 +176,7 @@ const MyPostWidget = ({ picturePath }) => {
         )}
 
         <Button
-          disabled={!post}
+          disabled={!post || !price || !category}
           onClick={handlePost}
           sx={{
             color: palette.background.alt,

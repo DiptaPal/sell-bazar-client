@@ -6,12 +6,34 @@ import MyPostWidget from "scenes/widgets/MyPostWidget";
 import PostsWidget from "scenes/widgets/PostsWidget";
 import AdvertWidget from "scenes/widgets/AdvertWidget";
 import FriendListWidget from "scenes/widgets/FriendListWidget";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import UserTable from "scenes/dashboard/UserTable";
+import PostTable from "./PostTable";
 
-const HomePage = () => {
+const Dashboard = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   const { _id, picturePath } = useSelector((state) => state.user);
-  const [selectedCategory, setSelectedCategory] = useState('all');
+
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const token = useSelector((state) => state.token);
+  const userPost = useSelector((state) => state.userPost);
+
+  const [users, setUsers] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const getUsers = async () => {
+    const response = await fetch(`http://localhost:3001/users`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await response.json();
+    setUsers(data);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getUsers();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Box>
@@ -23,7 +45,7 @@ const HomePage = () => {
         gap="0.5rem"
         justifyContent="space-between"
       >
-        <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
+        <Box flexBasis={isNonMobileScreens ? "20%" : undefined}>
           <UserWidget
             userId={_id}
             picturePath={picturePath}
@@ -32,23 +54,14 @@ const HomePage = () => {
           />
         </Box>
         <Box
-          flexBasis={isNonMobileScreens ? "42%" : undefined}
+          flexBasis={isNonMobileScreens ? "78%" : undefined}
           mt={isNonMobileScreens ? undefined : "2rem"}
         >
-          <MyPostWidget picturePath={picturePath} />
-          <PostsWidget userId={_id} selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}/>
+          {userPost === "user" ? <UserTable /> : <PostTable />}
         </Box>
-        {isNonMobileScreens && (
-          <Box flexBasis="26%">
-            <AdvertWidget />
-            <Box m="2rem 0" />
-            <FriendListWidget userId={_id} />
-          </Box>
-        )}
       </Box>
     </Box>
   );
 };
 
-export default HomePage;
+export default Dashboard;
