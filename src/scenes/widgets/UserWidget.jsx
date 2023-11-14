@@ -183,7 +183,7 @@ const UserWidget = ({
       <Divider />
 
       <>
-        {role && (
+        {role === "admin" ? (
           <>
             <Divider />
             <Box style={{ padding: "1rem 0px" }}>
@@ -213,6 +213,46 @@ const UserWidget = ({
                   onClick={() => dispatch(setUserPost({ userPost: "post" }))}
                 >
                   All Posts
+                </Button>
+              </Box>
+            </Box>
+          </>
+        ) : (
+          <>
+            <Divider />
+            <Box style={{ padding: "1rem 0px" }}>
+              <Typography
+                fontSize="1rem"
+                color={main}
+                fontWeight="500"
+                mb="1rem"
+              >
+                Category
+              </Typography>
+              <Box
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "10px",
+                }}
+              >
+                <Button
+                  variant={selectedCategory === "all" ? "contained" : "outlined"}
+                  onClick={() => handleCategoryChange("all")}
+                >
+                  All
+                </Button>
+                <Button
+                  variant={selectedCategory === "frontend" ? "contained" : "outlined"}
+                  onClick={() => handleCategoryChange("frontend")}
+                >
+                  Frontend
+                </Button>
+                <Button
+                  variant={selectedCategory === "backend" ? "contained" : "outlined"}
+                  onClick={() => handleCategoryChange("backend")}
+                >
+                  Backend
                 </Button>
               </Box>
             </Box>
