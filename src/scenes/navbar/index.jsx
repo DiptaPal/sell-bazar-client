@@ -33,7 +33,6 @@ const Navbar = () => {
   const user = useSelector((state) => state.user);
   const role = Boolean(useSelector((state) => state.role));
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-  
 
   const theme = useTheme();
   const neutralLight = theme.palette.neutral.light;
@@ -102,28 +101,46 @@ const Navbar = () => {
             </Link>
           )}
           <FormControl variant="standard" value={fullName}>
-            <Select
-              value={fullName}
-              sx={{
-                backgroundColor: neutralLight,
-                width: "150px",
-                borderRadius: "0.25rem",
-                p: "0.25rem 1rem",
-                "& .MuiSvgIcon-root": {
-                  pr: "0.25rem",
-                  width: "3rem",
-                },
-                "& .MuiSelect-select:focus": {
+            {user ? (
+              <Select
+                value={fullName}
+                sx={{
                   backgroundColor: neutralLight,
-                },
-              }}
-              input={<InputBase />}
-            >
-              <MenuItem value={fullName}>
-                <Typography>{fullName}</Typography>
-              </MenuItem>
-              <MenuItem onClick={() => dispatch(setLogout())}>Log Out</MenuItem>
-            </Select>
+                  width: "150px",
+                  borderRadius: "0.25rem",
+                  p: "0.25rem 1rem",
+                  "& .MuiSvgIcon-root": {
+                    pr: "0.25rem",
+                    width: "3rem",
+                  },
+                  "& .MuiSelect-select:focus": {
+                    backgroundColor: neutralLight,
+                  },
+                }}
+                input={<InputBase />}
+              >
+                <MenuItem value={fullName}>
+                  <Typography>{fullName}</Typography>
+                </MenuItem>
+                <MenuItem onClick={() => dispatch(setLogout())}>
+                  Log Out
+                </MenuItem>
+              </Select>
+            ) : (
+              <Link to="/login" style={{ textDecoration: "none" }}>
+                <Typography
+                  variant="button"
+                  color="primary"
+                  sx={{
+                    fontSize: "1rem",
+                    fontWeight: "bold",
+                    cursor: "pointer",
+                  }}
+                >
+                  Login
+                </Typography>
+              </Link>
+            )}
           </FormControl>
         </FlexBetween>
       ) : (

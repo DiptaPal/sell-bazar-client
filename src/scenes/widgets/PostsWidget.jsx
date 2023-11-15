@@ -35,7 +35,7 @@ const PostsWidget = ({ userId, isProfile = false,  selectedCategory, setSelected
     if (!selectedCategory || selectedCategory === 'all') {
       setFilteredPosts(posts);
     } else {
-      const filtered = posts.filter((post) => post.category === selectedCategory);
+      const filtered = posts.filter((post) => post.category === selectedCategory.toLocaleLowerCase());
       setFilteredPosts(filtered);
     }
   };
@@ -70,6 +70,7 @@ const PostsWidget = ({ userId, isProfile = false,  selectedCategory, setSelected
           comments,
           price,
           category,
+          level
         }) => (
           <PostWidget
             key={_id}
@@ -84,6 +85,7 @@ const PostsWidget = ({ userId, isProfile = false,  selectedCategory, setSelected
             comments={comments}
             price={price}
             category={category}
+            level={level}
           />
         )
       )}

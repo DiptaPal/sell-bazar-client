@@ -62,7 +62,7 @@ const Form = () => {
       formData.append(value, values[value]);
     }
     formData.append("picturePath", values.picture.name);
-    formData.append("role", "");
+    formData.append("role", "seller");
     formData.append("rating", "");
 
     const savedUserResponse = await fetch(
@@ -96,7 +96,7 @@ const Form = () => {
           role: loggedIn.user.role,
         })
       );
-      loggedIn?.user?.role ? navigate("/dashboard") : navigate("/home");
+      loggedIn?.user?.role==="admin" ? navigate("/dashboard") : navigate("/home");
     }
   };
 

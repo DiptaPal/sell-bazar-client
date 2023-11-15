@@ -23,7 +23,7 @@ const HomePage = () => {
         gap="0.5rem"
         justifyContent="space-between"
       >
-        <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
+        <Box flexBasis={isNonMobileScreens ? "20%" : undefined}>
           <UserWidget
             userId={_id}
             picturePath={picturePath}
@@ -32,20 +32,13 @@ const HomePage = () => {
           />
         </Box>
         <Box
-          flexBasis={isNonMobileScreens ? "42%" : undefined}
+          flexBasis={isNonMobileScreens ? "78%" : undefined}
           mt={isNonMobileScreens ? undefined : "2rem"}
         >
           <MyPostWidget picturePath={picturePath} />
           <PostsWidget userId={_id} selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}/>
         </Box>
-        {isNonMobileScreens && (
-          <Box flexBasis="26%">
-            <AdvertWidget />
-            <Box m="2rem 0" />
-            <FriendListWidget userId={_id} />
-          </Box>
-        )}
       </Box>
     </Box>
   );

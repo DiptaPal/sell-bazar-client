@@ -34,7 +34,7 @@ const UserWidget = ({
   const navigate = useNavigate();
   const token = useSelector((state) => state.token);
   const userPost = useSelector((state) => state.userPost);
-  const role = Boolean(useSelector((state) => state.role));
+  const role = useSelector((state) => state.role);
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
@@ -237,22 +237,110 @@ const UserWidget = ({
                 }}
               >
                 <Button
-                  variant={selectedCategory === "all" ? "contained" : "outlined"}
+                  variant={
+                    selectedCategory === "all" ? "contained" : "outlined"
+                  }
                   onClick={() => handleCategoryChange("all")}
                 >
-                  All
+                  All Category
                 </Button>
                 <Button
-                  variant={selectedCategory === "frontend" ? "contained" : "outlined"}
-                  onClick={() => handleCategoryChange("frontend")}
+                  variant={
+                    selectedCategory === "Electronics Bazaar"
+                      ? "contained"
+                      : "outlined"
+                  }
+                  onClick={() => handleCategoryChange("Electronics Bazaar")}
                 >
-                  Frontend
+                  Electronics Bazaar
                 </Button>
                 <Button
-                  variant={selectedCategory === "backend" ? "contained" : "outlined"}
-                  onClick={() => handleCategoryChange("backend")}
+                  variant={
+                    selectedCategory === "Fashion Bazaar"
+                      ? "contained"
+                      : "outlined"
+                  }
+                  onClick={() => handleCategoryChange("Fashion Bazaar")}
                 >
-                  Backend
+                  Fashion Bazaar
+                </Button>
+                <Button
+                  variant={
+                    selectedCategory === "Home & Living Marketplace"
+                      ? "contained"
+                      : "outlined"
+                  }
+                  onClick={() =>
+                    handleCategoryChange("Home & Living Marketplace")
+                  }
+                >
+                  Home & Living Marketplace
+                </Button>
+                <Button
+                  variant={
+                    selectedCategory === "Beauty & Wellness Bazaar"
+                      ? "contained"
+                      : "outlined"
+                  }
+                  onClick={() =>
+                    handleCategoryChange("Beauty & Wellness Bazaar")
+                  }
+                >
+                  Beauty & Wellness Bazaar
+                </Button>
+                <Button
+                  variant={
+                    selectedCategory === "Books & Stationery Corner"
+                      ? "contained"
+                      : "outlined"
+                  }
+                  onClick={() =>
+                    handleCategoryChange("Books & Stationery Corner")
+                  }
+                >
+                  Books & Stationery Corner
+                </Button>
+                <Button
+                  variant={
+                    selectedCategory === "Sports & Outdoor Emporium"
+                      ? "contained"
+                      : "outlined"
+                  }
+                  onClick={() =>
+                    handleCategoryChange("Sports & Outdoor Emporium")
+                  }
+                >
+                  Sports & Outdoor Emporium
+                </Button>
+                <Button
+                  variant={
+                    selectedCategory === "Toys & Games Haven"
+                      ? "contained"
+                      : "outlined"
+                  }
+                  onClick={() => handleCategoryChange("Toys & Games Haven")}
+                >
+                  Toys & Games Haven
+                </Button>
+                <Button
+                  variant={
+                    selectedCategory === "Art & Craft Bazaar"
+                      ? "contained"
+                      : "outlined"
+                  }
+                  onClick={() => handleCategoryChange("Art & Craft Bazaar")}
+                >
+                  Art & Craft Bazaar
+                </Button>
+                <Button
+                  variant={
+                    selectedCategory === "Jewelry Junction"
+                      ? "contained"
+                      : "outlined"
+                  }
+                  onClick={() => handleCategoryChange("Jewelry Junction")}
+                >
+                  Jewelry Junction
                 </Button>
               </Box>
             </Box>

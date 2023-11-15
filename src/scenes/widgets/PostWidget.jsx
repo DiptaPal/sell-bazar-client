@@ -24,6 +24,7 @@ const PostWidget = ({
   comments,
   price,
   category,
+  level
 }) => {
   const [isComments, setIsComments] = useState(false);
   const dispatch = useDispatch();
@@ -57,11 +58,12 @@ const PostWidget = ({
         subtitle={location}
         userPicturePath={userPicturePath}
         category={category}
+        level={level}
       />
       <Typography color={main} sx={{ mt: "1rem" }}>
         {description}
       </Typography>
-      {picturePath && (
+      {(picturePath !== "null" && picturePath !== undefined) && (
         <img
           width="100%"
           height="auto"

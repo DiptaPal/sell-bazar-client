@@ -16,6 +16,8 @@ import {
   Button,
   IconButton,
   useMediaQuery,
+  MenuItem,
+  TextField,
 } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
 import Dropzone from "react-dropzone";
@@ -30,7 +32,7 @@ const MyPostWidget = ({ picturePath }) => {
   const [isImage, setIsImage] = useState(false);
   const [image, setImage] = useState(null);
   const [post, setPost] = useState("");
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
   const { palette } = useTheme();
   const { _id } = useSelector((state) => state.user);
@@ -38,14 +40,22 @@ const MyPostWidget = ({ picturePath }) => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
-  
+
+  const resetForm = () => {
+    setImage(null);
+    setPost("");
+    setPrice("");
+    setCategory("");
+    setIsImage(false);
+  };
 
   const handlePost = async () => {
     const formData = new FormData();
     formData.append("userId", _id);
     formData.append("description", post);
-    formData.append("price", price);
-    formData.append("category", category);
+    formData.append("price", parseFloat(price));
+    formData.append("category", category.toLocaleLowerCase());
+    formData.append("level", 0);
     if (image) {
       formData.append("picture", image);
       formData.append("picturePath", image.name);
@@ -56,21 +66,25 @@ const MyPostWidget = ({ picturePath }) => {
       headers: { Authorization: `Bearer ${token}` },
       body: formData,
     });
+    console.log(formData);
     const posts = await response.json();
     dispatch(setPosts({ posts }));
-    setImage(null);
-    setPost("");
-    setPrice(0);
-    setCategory("");
+    resetForm();
+    
   };
 
   return (
     <WidgetWrapper>
-      <FlexBetween gap="1.5rem" flexDirection={!isNonMobileScreens ? "column" : "row"}>
+      <FlexBetween
+        gap="1.5rem"
+        flexDirection={!isNonMobileScreens ? "column" : "row"}
+      >
         <UserImage image={picturePath} />
         <InputBase
           placeholder="Description of your product"
           onChange={(e) => setPost(e.target.value)}
+          value={post}
+          required
           sx={{
             width: "100%",
             backgroundColor: palette.neutral.light,
@@ -81,6 +95,8 @@ const MyPostWidget = ({ picturePath }) => {
         <InputBase
           placeholder="Price of your product"
           onChange={(e) => setPrice(e.target.value)}
+          value={price}
+          required
           sx={{
             width: "100%",
             backgroundColor: palette.neutral.light,
@@ -88,27 +104,52 @@ const MyPostWidget = ({ picturePath }) => {
             padding: "1rem 2rem",
           }}
         />
-        <InputBase
-          placeholder="Category"
+        <TextField
+          select
+          label="Select a category"
+          value={category}
+          required
           onChange={(e) => setCategory(e.target.value)}
+          variant="outlined"
+          fullWidth
           sx={{
-            width: "100%",
-            backgroundColor: palette.neutral.light,
-            borderRadius: "2rem",
-            padding: "1rem 2rem",
+            marginTop: isNonMobileScreens ? 0 : "1rem",
           }}
-        />
+        >
+          <MenuItem value="" disabled>
+            Select a category
+          </MenuItem>
+          <MenuItem value="Electronics Bazaar">Electronics Bazaar</MenuItem>
+          <MenuItem value="Fashion Bazaar">Fashion Bazaar</MenuItem>
+          <MenuItem value="Home & Living Marketplace">
+            Home & Living Marketplace
+          </MenuItem>
+          <MenuItem value="Beauty & Wellness Bazaar">
+            Beauty & Wellness Bazaar
+          </MenuItem>
+          <MenuItem value="Books & Stationery Corner">
+            Books & Stationery Corner
+          </MenuItem>
+          <MenuItem value="Sports & Outdoor Emporium">
+            Sports & Outdoor Emporium
+          </MenuItem>
+          <MenuItem value="Toys & Games Haven">Toys & Games Haven</MenuItem>
+          <MenuItem value="Art & Craft Bazaar">Art & Craft Bazaar</MenuItem>
+          <MenuItem value="Jewelry Junction">Jewelry Junction</MenuItem>
+        </TextField>
       </FlexBetween>
       {isImage && (
         <Box
           border={`1px solid ${medium}`}
           borderRadius="5px"
           mt="1rem"
-          p="1rem">
+          p="1rem"
+        >
           <Dropzone
             acceptedFiles=".jpg,.jpeg,.png"
             multiple={false}
-            onDrop={(acceptedFiles) => setImage(acceptedFiles[0])}>
+            onDrop={(acceptedFiles) => setImage(acceptedFiles[0])}
+          >
             {({ getRootProps, getInputProps }) => (
               <FlexBetween>
                 <Box
@@ -116,7 +157,8 @@ const MyPostWidget = ({ picturePath }) => {
                   border={`2px dashed ${palette.primary.main}`}
                   p="1rem"
                   width="100%"
-                  sx={{ "&:hover": { cursor: "pointer" } }}>
+                  sx={{ "&:hover": { cursor: "pointer" } }}
+                >
                   <input {...getInputProps()} />
                   {!image ? (
                     <p>Add Image Here</p>
@@ -130,7 +172,8 @@ const MyPostWidget = ({ picturePath }) => {
                 {image && (
                   <IconButton
                     onClick={() => setImage(null)}
-                    sx={{ width: "15%" }}>
+                    sx={{ width: "15%" }}
+                  >
                     <DeleteOutlined />
                   </IconButton>
                 )}
@@ -147,7 +190,8 @@ const MyPostWidget = ({ picturePath }) => {
           <ImageOutlined sx={{ color: mediumMain }} />
           <Typography
             color={mediumMain}
-            sx={{ "&:hover": { cursor: "pointer", color: medium } }}>
+            sx={{ "&:hover": { cursor: "pointer", color: medium } }}
+          >
             Image
           </Typography>
         </FlexBetween>
@@ -182,7 +226,8 @@ const MyPostWidget = ({ picturePath }) => {
             color: palette.background.alt,
             backgroundColor: palette.primary.main,
             borderRadius: "3rem",
-          }}>
+          }}
+        >
           POST
         </Button>
       </FlexBetween>
